@@ -8,7 +8,7 @@ require("dotenv").config();
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@plantsserver.ofsyqsf.mongodb.net/?retryWrites=true&w=majority&appName=PlantsServer`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@chicken-hub.rc8bdv2.mongodb.net/?retryWrites=true&w=majority&appName=Chicken-Hub`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -25,7 +25,7 @@ async function run() {
     const database = client.db("usersdb");
     const usersCollection = database.collection("users");
 
-    app.get("/my-plants", async (req, res) => {
+    app.get("/all-foods", async (req, res) => {
       const cursor = usersCollection.find();
       const result = await cursor.toArray();
       res.send(result);
@@ -38,12 +38,12 @@ async function run() {
     //   res.send(result);
     // });
 
-    // app.post("/my-plants", async (req, res) => {
-    //   console.log("data in the server ", req.body);
-    //   const newUser = req.body;
-    //   const result = await usersCollection.insertOne(newUser);
-    //   res.send(result);
-    // });
+    app.post("/all-foods", async (req, res) => {
+      console.log("data in the server ", req.body);
+      const newfood = req.body;
+      const result = await usersCollection.insertOne(newfood);
+      res.send(result);
+    });
 
     // app.put("/my-plants/:id", async (req, res) => {
     //   const id = req.params.id;
@@ -82,9 +82,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Plants server is active now...!");
+  res.send("Chicken Hub server is active now...!");
 });
 
 app.listen(port, () => {
-  console.log(`Plants server is running on port ${port}`);
+  console.log(`Chicken Hub server is running on port ${port}`);
 });
