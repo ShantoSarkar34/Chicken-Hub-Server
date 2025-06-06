@@ -45,24 +45,25 @@ async function run() {
       res.send(result);
     });
 
-    // app.put("/my-plants/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const filter = { _id: new ObjectId(id) };
-    //   const user = req.body;
+    app.put("/all-foods/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const user = req.body;
 
-    //   const updatedInfo = {
-    //     $set: {
-    //       name: user.name,
-    //       photo: user.photo,
-    //       price: user.price,
-    //       lasteDate: user.lastDate,
-    //       nextDate: user.nextDate,
-    //       des: user.des,
-    //     },
-    //   };
-    //   const result = await usersCollection.updateOne(filter, updatedInfo);
-    //   res.send(result);
-    // });
+      const updatedInfo = {
+        $set: {
+          foodName: user.foodName,
+          foodPhoto: user.foodPhoto,
+          expireDate: user.expireDate,
+          description: user.description,
+          quantity: user.quantity,
+          currentDate: user.currentDate,
+          category: user.category,
+        },
+      };
+      const result = await usersCollection.updateOne(filter, updatedInfo);
+      res.send(result);
+    });
 
     app.delete("/all-foods/:id", async (req, res) => {
       const id = req.params.id;
