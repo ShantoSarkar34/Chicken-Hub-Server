@@ -4,7 +4,6 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 3000;
 require("dotenv").config();
-
 app.use(cors());
 app.use(express.json());
 
@@ -39,7 +38,6 @@ async function run() {
     });
 
     app.post("/all-foods", async (req, res) => {
-      console.log("data in the server ", req.body);
       const newfood = req.body;
       const result = await usersCollection.insertOne(newfood);
       res.send(result);
