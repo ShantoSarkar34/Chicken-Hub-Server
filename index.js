@@ -20,10 +20,8 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-
     const database = client.db("usersdb");
     const usersCollection = database.collection("users");
-
     app.get("/all-foods", async (req, res) => {
       const cursor = usersCollection.find();
       const result = await cursor.toArray();
@@ -47,7 +45,6 @@ async function run() {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const user = req.body;
-
       const updatedInfo = {
         $set: {
           foodName: user.foodName,
@@ -71,9 +68,6 @@ async function run() {
     });
 
     await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
   } catch (err) {
     console.error("MongoDB connection error:", err);
   }
