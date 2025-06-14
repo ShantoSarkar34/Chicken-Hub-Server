@@ -22,6 +22,7 @@ async function run() {
     await client.connect();
     const database = client.db("usersdb");
     const usersCollection = database.collection("users");
+
     app.get("/all-foods", async (req, res) => {
       const cursor = usersCollection.find();
       const result = await cursor.toArray();
@@ -33,6 +34,27 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await usersCollection.findOne(query);
       res.send(result);
+    });
+
+    app.get("/nearly-expired-foods", async (req, res) => {
+      const today = new Date();
+      const fiveDaysFromNow = new Date();
+      fiveDaysFromNow.setDate(today.getDate() + 5);
+
+      try {
+        const query = {
+          expireDate: {
+            $gte: today,
+            $lte: fiveDaysFromNow,
+          },
+        };
+
+        const result = await foodCollection.find(query).toArray();
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ error: "Failed to fetch nearly expired foods" });
+      }
     });
 
     app.post("/all-foods", async (req, res) => {
