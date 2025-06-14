@@ -37,22 +37,18 @@ async function run() {
     });
 
     app.get("/nearly-expired-foods", async (req, res) => {
-      const today = new Date();
-      const fiveDaysFromNow = new Date();
-      fiveDaysFromNow.setDate(today.getDate() + 5);
-
       try {
-        const query = {
-          expireDate: {
-            $gte: today,
-            $lte: fiveDaysFromNow,
-          },
-        };
+        const allFoods = await usersCollection.find().toArray();
+        const today = new Date();
+        const fiveDaysFromNow = new Date();
+        fiveDaysFromNow.setDate(today.getDate() + 5);
+        const nearlyExpired = allFoods.filter((food) => {
+          const exp = new Date(food.expireDate);
+          return exp >= today && exp <= fiveDaysFromNow;
+        });
 
-        const result = await foodCollection.find(query).toArray();
-        res.send(result);
+        res.send(nearlyExpired);
       } catch (error) {
-        console.error(error);
         res.status(500).send({ error: "Failed to fetch nearly expired foods" });
       }
     });
