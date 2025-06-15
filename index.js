@@ -52,6 +52,16 @@ async function run() {
       }
     });
 
+    app.get("/my-items", async (req, res) => {
+      const email = req.query.email;
+      console.log(req.body);
+      if (!email) {
+        return res.status(400).send({ message: "Email query is required" });
+      }
+      const result = await usersCollection.find({ userEmail: email }).toArray();
+      res.send(result);
+    });
+
     app.post("/all-foods", async (req, res) => {
       const newfood = req.body;
       const result = await usersCollection.insertOne(newfood);
@@ -71,7 +81,6 @@ async function run() {
           quantity: user.quantity,
           currentDate: user.currentDate,
           category: user.category,
-          userEmail: user.userEmail,
         },
       };
       const result = await usersCollection.updateOne(filter, updatedInfo);
