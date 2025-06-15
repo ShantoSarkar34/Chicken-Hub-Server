@@ -46,7 +46,6 @@ async function run() {
           const exp = new Date(food.expireDate);
           return exp >= today && exp <= fiveDaysFromNow;
         });
-
         res.send(nearlyExpired);
       } catch (error) {
         res.status(500).send({ error: "Failed to fetch nearly expired foods" });
@@ -72,6 +71,7 @@ async function run() {
           quantity: user.quantity,
           currentDate: user.currentDate,
           category: user.category,
+          userEmail: user.userEmail,
         },
       };
       const result = await usersCollection.updateOne(filter, updatedInfo);
